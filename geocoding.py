@@ -10,7 +10,7 @@ def geocode_from_address(address, key = api_key):
 
     Input:
     address (str): A human readable address
-    key (str): A Google Maps Platform API key 
+    key (str): A Google Maps Platform API key, defaults to a hardcoded variable or can be entered at runtime
 
     Return:
     latitude, longitude: Tuple of floats represeting the decimal latitude and longitude, or None if it could not be found
@@ -27,6 +27,19 @@ def geocode_from_address(address, key = api_key):
         return None, None
 
 def geocode_file_excel(input_file_name, output_file_name, key = api_key):
+    """
+    Opens an Excel file containing a column of addresses (the full addresses should be in the rightmost column)
+    Each address is geocoded using the Google Maps Platform API, and the latitude and longitude are written into a new 
+    output file. 
+
+    Input:
+    input_file_name (str): The path to the input file 
+    output_file_name (str): The path to the output file (will overwrite files with the same name)
+    key (str): Defaults to a hardcoded value, or can be entered at runtime. A Google Maps Platform API key. 
+
+    Output:
+    int: 1 on a succesful completion.
+    """
     input_wb = openpyxl.load_workbook(filename = input_file_name)
     input_ws = input_wb.active
     output_wb = openpyxl.Workbook()
@@ -60,4 +73,9 @@ def geocode_file_csv(input_file_name, output_file_name, key = api_key):
 if __name__ == '__main__':
     #address = "Jeremy Ranch Park & Ride, Park City, UT"
     #print(geocode_from_address(address))
-    geocode_file_excel("../../../Desktop/test.xlsx", "../../../Desktop/output.xlsx")
+    if api_key == "":
+        key = input("Please enter your Google Maps Platform API key:\n")
+        print("For future reference, the API key can be hardcoded in the file to prevent this message.")
+        geocode_file_excel("../../../Desktop/test.xlsx", "../../../Desktop/output.xlsx", key)
+    else:
+        geocode_file_excel("../../../Desktop/test.xlsx", "../../../Desktop/output.xlsx")
