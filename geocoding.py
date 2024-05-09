@@ -1,5 +1,5 @@
 import googlemaps
-from openpyxl import Workbook
+import openpyxl
 import csv
 
 api_key = ""
@@ -24,6 +24,26 @@ def geocode_from_address(address, key = api_key):
     except:
         return None
 
+def geocode_file_excel(input_file_name, output_file_name, key = api_key):
+    input_wb = openpyxl.load_workbook(filename = input_file_name)
+    input_ws = input_wb.active
+    output_wb = openpyxl.Workbook()
+    output_ws = output_wb.active
+
+    row_num = 1
+    for row in input_ws.values:
+        print(row[1])
+        output_ws.cell(row = row_num, column = len(row)+1, value = row[0])
+        row_num += 1
+    output_wb.save(output_file_name)
+
+    return 1
+
+def geocode_file_csv(input_file_name, output_file_name, key = api_key):
+    None
+
+
 if __name__ == '__main__':
-    address = "Jeremy Ranch Park & Ride, Park City, UT"
-    print(geocode_from_address(address))
+    #address = "Jeremy Ranch Park & Ride, Park City, UT"
+    #print(geocode_from_address(address))
+    geocode_file_excel("../../../Desktop/test.xlsx", "../../../Desktop/output.xlsx", 5)
